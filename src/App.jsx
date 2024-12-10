@@ -38,7 +38,7 @@ function App() {
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
-            { role: "system", content: "You will be provided with a list of common products and you will estimate their summarized value in PLN, and give only single number as answer. If you dont know any product, count it as 0." },
+            { role: "system", content: "You will be provided with a list of common products and you will estimate their summarized value in USD, and give only single number as answer. If you don't know any product, count it as 0." },
             {
                 role: "user",
                 content: itemsString,
@@ -57,12 +57,12 @@ function App() {
 
 
 
-  const response = useMemo(() => R.pathOr(0, ['choices', 0, 'message', 'content'], gptResponse) + "PLN!", [gptResponse])
+  const response = useMemo(() => R.pathOr(0, ['choices', 0, 'message', 'content'], gptResponse) + "USD!", [gptResponse])
 
 
   useEffect(() => {
     if (isPending) {
-      console.log('Nasi eksperci przeliczają...');
+      console.log('Our experts are calculating...');
     }
   }, [isPending]);
 
@@ -74,15 +74,15 @@ function App() {
           <img src={duck} alt="Duck" className="mb-4" style={{width: '50%', height: '50%', textAlign: 'center'}} />
         </div>
 
-        <div className="flex justify-center items-center mb-4">Chcesz oszczędzać, a goście ciągle przychodzą?
-          Sprawdź ile na nich wydajesz:</div>
+        <div className="flex justify-center items-center mb-4">Want to save money, but guests keep coming?
+          Check how much you spend on them:</div>
         <div className="flex gap-2 mb-4 text-left">
           <TextField
             fullWidth
             value={newItem}
             onChange={(e) => setNewItem(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleAddItem()}
-            placeholder="Zjedli, wypili, zużyli..."
+            placeholder="They ate, drank, used..."
             size="small"
           />
           <Button 
@@ -90,7 +90,7 @@ function App() {
             onClick={handleAddItem}
             className="whitespace-nowrap"
           >
-            Dodaj
+            Add
           </Button>
         </div>
         <List className="mb-4">
@@ -116,14 +116,14 @@ function App() {
           disabled={items.length === 0 || isPending}
           className="mb-4"
         >
-          {isPending ? 'Wysyłanie do Diodaka...' : 'Oszacuj straty'}
+          {isPending ? 'Sending to Diodak...' : 'Estimate losses'}
         </Button>
         </Paper>) : 
         <Paper elevation={3} className="p-0 mt-4 bg-gray-50">    
-            {response !== "0PLN!" ? 
+            {response !== "0USD!" ? 
             <div className="whitespace-pre-wrap absolute top--20 left-0 w-full text-center text-4xl text-white" style={{textShadow: '0 0 8px #fff'}}>{response}</div> : null}
-            {response === "0PLN!" ? 
-            <div className="text-center w-full p-10">Wygląda na to, że odniosłeś tylko straty moralne. Chyba mogą wrócić...</div> :
+            {response === "0USD!" ? 
+            <div className="text-center w-full p-10">Looks like you only suffered moral losses. Maybe they can come back...</div> :
              <img src={duckbg} alt="Duck" className="w-[100%] h-[50%] text-center"  />}
           </Paper>
 }
