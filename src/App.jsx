@@ -1,10 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
-import { TextField, Button, IconButton, List, ListItem, ListItemText, Paper, CircularProgress } from '@mui/material'
+import { TextField, Button, IconButton, List, ListItem, ListItemText, Paper } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import * as R from 'ramda'
 import duck from './assets/duck.png'
-import duckAngry from './assets/duckAngry.png'
-import duckhappy from './assets/duckhappy.png'
 import duckbg from './assets/duckbg.png'  
 import OpenAI from "openai";
 
@@ -57,16 +55,19 @@ function App() {
     }
   };
 
+
+
   const response = useMemo(() => R.pathOr(0, ['choices', 0, 'message', 'content'], gptResponse) + "PLN!", [gptResponse])
+
 
   useEffect(() => {
     if (isPending) {
-      console.log('Waiting for GPT response...');
+      console.log('Nasi eksperci przeliczają...');
     }
   }, [isPending]);
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center w-screen h-screen bg-[#042630] bg-repeat p-10">
       {gptResponse === null ? (
         <Paper className="p-6 max-w-2xl mx-auto" elevation={3}>
         <div className="flex justify-center items-center mb-4">
@@ -115,13 +116,15 @@ function App() {
           disabled={items.length === 0 || isPending}
           className="mb-4"
         >
-          {isPending ? 'Oczekiwanie...' : 'Oszacuj straty'}
+          {isPending ? 'Wysyłanie do Diodaka...' : 'Oszacuj straty'}
         </Button>
         </Paper>) : 
         <Paper elevation={3} className="p-0 mt-4 bg-gray-50">    
-            <pre className="whitespace-pre-wrap">{response}</pre>
             {response !== "0PLN!" ? 
-            <img src={duckbg} alt="Duck" style={{width: '100%', height: '100%', textAlign: 'center', animation: 'grow 2s'}} /> : <img src={duckhappy} alt="Duck" className="mb-4" style={{width: '50%', height: '50%', textAlign: 'center', animation: 'grow 2s'}} />}
+            <div className="whitespace-pre-wrap absolute top--20 left-0 w-full text-center text-4xl text-white" style={{textShadow: '0 0 8px #fff'}}>{response}</div> : null}
+            {response === "0PLN!" ? 
+            <div className="text-center w-full p-10">Wygląda na to, że odniosłeś tylko straty moralne. Chyba mogą wrócić...</div> :
+             <img src={duckbg} alt="Duck" className="w-[100%] h-[50%] text-center"  />}
           </Paper>
 }
     </div>
